@@ -50,10 +50,18 @@ impl AuthListener {
 
     async fn request_handler(mut sender: Sender<String>, req: Request<Body>) -> Result<Response<Body>, Infallible> {
         let (parts, body) = req.into_parts();
-        let headers = parts.headers;
-        println!("Request headers: {:?}", headers);
-        println!("Request URI: {:?}", parts.uri);
-        sender.try_send("THE KEY".to_string()).unwrap();
-        Ok(Response::new("Authentication successful. You can close this browser window.".into()))
+        let uri = parts.uri;
+        if let Some(query) = uri.query() {
+            // Check if query contains an access code
+            if query.contains("code=") {
+                // extract key from query
+                let key_start = query.find("=").unwrap(); // Cannot fail, we just tested whether it contains 'code='
+                let key = &query[key_start+1..];
+                // Send it back through our message pipe, this will kill the server
+                sender.try_send(key.to_string()).unwrap();
+                return Ok(Response::new("Authentication successful. You can close this browser window.".into()));
+            }
+        }
+        Ok(Response::new("Authentication failed.".into()))
     }
 }
