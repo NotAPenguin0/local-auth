@@ -7,7 +7,7 @@ pub enum Error {
 
 impl Display for Error {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.to_string())
+        write!(f, "{:?}", &self)
     }
 }
 
