@@ -41,9 +41,7 @@ impl AuthListener {
         let mut auth_code: Option<String> = None;
         let server = server.with_graceful_shutdown(async {
             let value = receiver.next().await;
-            if let Some(v) = &value {
-                println!("key: {:?}", v);
-            }
+            println!("Received message");
             auth_code = value;
         });
 
