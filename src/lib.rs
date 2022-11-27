@@ -57,8 +57,10 @@ impl AuthListener {
                 // extract key from query
                 let key_start = query.find("=").unwrap(); // Cannot fail, we just tested whether it contains 'code='
                 let key = &query[key_start+1..];
+                // Remove quotes
+                let key = key.replace("\"", "");
                 // Send it back through our message pipe, this will kill the server
-                sender.try_send(key.to_string()).unwrap();
+                sender.try_send(key).unwrap();
                 return Ok(Response::new("Authentication successful. You can close this browser window.".into()));
             }
         }
