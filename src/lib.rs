@@ -57,8 +57,9 @@ impl AuthListener {
         println!("Received request: {:?}", hyper::body::to_bytes(req.into_body()).await.unwrap());
         let mut my_sender: Option<Sender<String>> = None;
         std::mem::swap(&mut sender.as_ref(), &mut &*&mut my_sender);
-        let sender = my_sender.unwrap();
-        sender.send("THE KEY".to_string()).unwrap();
+        if let Some(sender) = my_sender {
+            sender.send("THE KEY".to_string()).unwrap();
+        }
 
         Ok(Response::new("Authentication successful. You can close this browser window.".into()))
     }
