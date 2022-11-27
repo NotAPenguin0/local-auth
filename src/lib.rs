@@ -52,6 +52,7 @@ impl AuthListener {
         let (parts, body) = req.into_parts();
         let headers = parts.headers;
         println!("Request headers: {:?}", headers);
+        println!("Request URI: {:?}", parts.uri);
         sender.try_send("THE KEY".to_string()).unwrap();
         Ok(Response::new("Authentication successful. You can close this browser window.".into()))
     }
