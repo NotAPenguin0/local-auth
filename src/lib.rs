@@ -3,8 +3,8 @@ mod port;
 use anyhow;
 use hyper;
 
+
 use std::convert::Infallible;
-use hyper::server::conn::AddrIncoming;
 use hyper::{Request, Body, Response};
 
 /// Local HTTP server that listens for authentication requests on a local port.
