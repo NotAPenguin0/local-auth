@@ -1,4 +1,4 @@
-mod port;
+pub mod port;
 
 use anyhow;
 use hyper;
