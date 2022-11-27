@@ -41,7 +41,6 @@ impl AuthListener {
         let mut auth_code: Option<String> = None;
         let server = server.with_graceful_shutdown(async {
             let value = receiver.next().await;
-            println!("Received message");
             auth_code = value;
         });
 
@@ -50,7 +49,9 @@ impl AuthListener {
     }
 
     async fn request_handler(mut sender: Sender<String>, req: Request<Body>) -> Result<Response<Body>, Infallible> {
-        println!("Received request: {:?}", hyper::body::to_bytes(req.into_body()).await.unwrap());
+        let (parts, body) = req.into_parts();
+        let headers = parts.headers;
+        println!("Request headers: {:?}", headers);
         sender.try_send("THE KEY".to_string()).unwrap();
         Ok(Response::new("Authentication successful. You can close this browser window.".into()))
     }
