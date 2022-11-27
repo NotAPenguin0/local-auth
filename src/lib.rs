@@ -12,7 +12,8 @@ pub struct AuthListener {
     address: std::net::SocketAddr,
 }
 
-async fn service_handler_temp(_req: Request<Body>) -> Result<Response<Body>, Infallible> {
+async fn service_handler_temp(req: Request<Body>) -> Result<Response<Body>, Infallible> {
+    println!("Received request: {:?}", hyper::body::to_bytes(req.into_body()).await.unwrap());
     Ok(Response::new("Hello, World".into()))
 }
 
