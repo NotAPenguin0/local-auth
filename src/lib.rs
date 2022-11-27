@@ -33,7 +33,7 @@ impl AuthListener {
         });
 
         let server = hyper::Server::try_bind(&self.address)?.serve(make_service);
-        server.await;
+        server.await?;
         Ok(())
     }
 }
